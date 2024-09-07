@@ -10,12 +10,12 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- *
- * @TableName t_user
+ * 
+ * @TableName t_group
  */
+@TableName(value ="t_group")
 @Data
-@TableName("t_user")
-public class UserDO extends BaseDO implements Serializable {
+public class GroupDO extends BaseDO implements Serializable {
     /**
      * ID
      */
@@ -23,34 +23,24 @@ public class UserDO extends BaseDO implements Serializable {
     private Long id;
 
     /**
-     * 用户名
+     * 分组标识
+     */
+    private String gid;
+
+    /**
+     * 分组名称
+     */
+    private String name;
+
+    /**
+     * 创建分组用户名
      */
     private String username;
 
     /**
-     * 密码
+     * 分组排序
      */
-    private String password;
-
-    /**
-     * 真实姓名
-     */
-    private String realName;
-
-    /**
-     * 手机号
-     */
-    private String phone;
-
-    /**
-     * 邮箱
-     */
-    private String mail;
-
-    /**
-     * 注销时间戳
-     */
-    private Long deletionTime;
+    private Integer sort_order;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
