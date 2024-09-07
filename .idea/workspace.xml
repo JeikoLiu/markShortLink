@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d130e1b4-4dbf-471a-955a-0b9d05f3e08f" name="Changes" comment="feature: 开发公共依赖文件">
-      <change afterPath="$PROJECT_DIR$/admin/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gateway/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="d130e1b4-4dbf-471a-955a-0b9d05f3e08f" name="Changes" comment="feature: 完成用户管理模块的开发" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -146,7 +141,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1725265055197</updated>
-      <workItem from="1725265056280" duration="90676000" />
+      <workItem from="1725265056280" duration="92710000" />
     </task>
     <task id="LOCAL-00001" summary="feature: 开发公共依赖文件">
       <created>1725433384868</created>
@@ -155,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1725433384868</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feature: 完成用户管理模块的开发">
+      <created>1725633326800</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1725633326800</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,7 +176,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feature: 开发公共依赖文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature: 开发公共依赖文件" />
+    <MESSAGE value="feature: 完成用户管理模块的开发" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature: 完成用户管理模块的开发" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
