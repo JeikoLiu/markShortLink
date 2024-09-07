@@ -86,6 +86,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
                     .eq(GroupDO::getDelFlag, 0);
             baseMapper.update(groupDO, updateWrapper);
         });
+        // TODO 实现批量的排序
     }
 
     private boolean hasGid(String gid) {

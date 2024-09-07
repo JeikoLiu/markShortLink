@@ -16,8 +16,8 @@ public enum BaseErrorCode implements IErrorCode{
     PASSWORD_VERIFY_ERROR("A000120", "密码校验失败"),
     PASSWORD_SHORT_ERROR("A000121", "密码长度不够"),
     PHONE_VERIFY_ERROR("A000151", "手机格式校验失败"),
-
-    USER_NULL("A000200", "用户不存在"),
+    USER_NULL("A000199", "用户不存在"),
+    USER_TOKEN_FAIL("A000202", "用户token验证失败"),
 
     // ========== 二级宏观错误码 系统请求缺少幂等Token ==========
     IDEMPOTENT_TOKEN_NULL_ERROR("A000200", "幂等Token为空"),
