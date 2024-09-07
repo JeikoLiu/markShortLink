@@ -3,6 +3,7 @@ package com.jeiko.shortlink_demo.admin.controller;
 import com.jeiko.shortlink_demo.admin.common.convention.result.BaseResult;
 import com.jeiko.shortlink_demo.admin.common.convention.result.ResultUtils;
 import com.jeiko.shortlink_demo.admin.dto.req.ShortLinkGroupSaveReqDTO;
+import com.jeiko.shortlink_demo.admin.dto.req.ShortLinkGroupSortReqDTO;
 import com.jeiko.shortlink_demo.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import com.jeiko.shortlink_demo.admin.dto.resp.ShortLinkGroupListRespDTO;
 import com.jeiko.shortlink_demo.admin.service.GroupService;
@@ -52,6 +53,15 @@ public class GroupController {
     public BaseResult<Void> deleteGroup(@RequestParam String gid) {
         groupService.deleteGroup(gid);
         return ResultUtils.success();
+     }
+
+    /**
+     * 短链接分组排序
+     */
+     @PostMapping("/api/short-link/admin/v1/sort")
+    public BaseResult<Void> sortGroup(@RequestBody List<ShortLinkGroupSortReqDTO> requestParam) {
+         groupService.sortGroup(requestParam);
+         return ResultUtils.success();
      }
 
 }

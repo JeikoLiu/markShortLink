@@ -2,6 +2,7 @@ package com.jeiko.shortlink_demo.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jeiko.shortlink_demo.admin.dao.entity.GroupDO;
+import com.jeiko.shortlink_demo.admin.dto.req.ShortLinkGroupSortReqDTO;
 import com.jeiko.shortlink_demo.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import com.jeiko.shortlink_demo.admin.dto.resp.ShortLinkGroupListRespDTO;
 
@@ -34,4 +35,11 @@ public interface GroupService extends IService<GroupDO> {
      * @param gid 短链接标识
      */
     void deleteGroup(String gid);
+
+    /**
+     * 短链接分组排序
+     * @param requestParam 分组排序请求参数
+     */
+    void sortGroup(List<ShortLinkGroupSortReqDTO> requestParam);
+
 }
