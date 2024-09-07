@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jeiko.shortlink_demo.admin.common.database.BaseDO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -15,6 +18,9 @@ import java.io.Serializable;
  */
 @TableName(value ="t_group")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupDO extends BaseDO implements Serializable {
     /**
      * ID
@@ -40,7 +46,7 @@ public class GroupDO extends BaseDO implements Serializable {
     /**
      * 分组排序
      */
-    private Integer sort_order;
+    private Integer sortOrder;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
