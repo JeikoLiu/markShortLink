@@ -44,4 +44,14 @@ public class GroupController {
         return ResultUtils.success();
     }
 
+    /**
+     * 删除短链接分组
+     * @param gid 短链接标识
+     */
+     @DeleteMapping("/api/short-link/admin/v1/group")
+    public BaseResult<Void> deleteGroup(@RequestParam String gid) {
+        groupService.deleteGroup(gid);
+        return ResultUtils.success();
+     }
+
 }
