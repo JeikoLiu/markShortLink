@@ -23,6 +23,8 @@ import static com.jeiko.shortlink_demo.admin.common.convention.errorcode.BaseErr
 /**
  * 用户信息传输过滤器
  */
+
+// TODO 用拦截器方式实现
 @RequiredArgsConstructor
 public class UserTransmitFilter implements Filter {
     private final StringRedisTemplate stringRedisTemplate;
