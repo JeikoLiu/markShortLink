@@ -1,9 +1,12 @@
 package com.jeiko.shortlink_demo.project.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jeiko.shortlink_demo.project.dao.entity.ShortLinkDO;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkCreateReqDTO;
+import com.jeiko.shortlink_demo.project.dto.req.ShortLinkPageReqDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkCreateRespDTO;
+import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkPageRespDTO;
 
 /**
  * 短链接接口层
@@ -16,4 +19,11 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
      * @return 短链接的创建信息
      */
     ShortLinkCreateRespDTO createShortLink(ShortLinkCreateReqDTO requestParam);
+
+    /**
+     * 分页查询短链接
+     * @param requestParam 分页查询参数
+     * @return 短链接分页返回结果
+     */
+    IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkPageReqDTO requestParam);
 }
