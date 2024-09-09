@@ -15,6 +15,7 @@ import com.jeiko.shortlink_demo.admin.dto.req.UserRegisterResDTO;
 import com.jeiko.shortlink_demo.admin.dto.req.UserUpdateResDTO;
 import com.jeiko.shortlink_demo.admin.dto.resp.UserLoginRespDTO;
 import com.jeiko.shortlink_demo.admin.dto.resp.UserRespDTO;
+import com.jeiko.shortlink_demo.admin.service.GroupService;
 import com.jeiko.shortlink_demo.admin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RBloomFilter;
@@ -41,6 +42,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
     private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
+    private final GroupService groupService;
+
     @Override
     public UserRespDTO getUserByUsername(String username) {
         LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, username);
@@ -75,6 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
             }
             // 2.将注册成功的用户刷添加至布隆过滤器内
             userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
+            groupService.saveGroup(requestParam.getUsername(),"默认分组");
         } catch (DuplicateKeyException exception) {
             throw new ClientException(BaseErrorCode.USER_EXIST);
         } finally {
