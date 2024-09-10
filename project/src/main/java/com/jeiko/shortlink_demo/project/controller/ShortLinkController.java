@@ -5,6 +5,7 @@ import com.jeiko.shortlink_demo.project.common.convention.result.BaseResult;
 import com.jeiko.shortlink_demo.project.common.convention.result.ResultUtils;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkCreateReqDTO;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkPageReqDTO;
+import com.jeiko.shortlink_demo.project.dto.req.ShortLinkUpdateReqDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkCreateRespDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkGroupCountRespDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkPageRespDTO;
@@ -41,6 +42,15 @@ public class ShortLinkController {
         requestParam.setCurrent(current);
         requestParam.setSize(size);
         return ResultUtils.success(shortLinkService.pageShortLink(requestParam));
+    }
+
+    /**
+     * 修改短链接
+     */
+    @PostMapping("/api/short-link/v1/update")
+    public BaseResult<Void> updateShortLink(@RequestBody ShortLinkUpdateReqDTO requestParam) {
+        shortLinkService.updateShortLink(requestParam);
+        return ResultUtils.success();
     }
 
     /**
