@@ -43,6 +43,16 @@ public interface ShortLinkRemoteService {
         requestMap.put("size", requestParam.getSize());
         // TODO 调用短链接中心接口参数无法传递
         String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/page", requestMap);
+
+//        String url = "http://127.0.0.1:8001/api/short-link/v1/page";
+//        requestMap.put("gid", requestParam.getGid());
+//        requestMap.put("current", requestParam.getCurrent());
+//        requestMap.put("size", requestParam.getSize());
+//        String resultPageStr = HttpRequest.post(url)
+//                .contentType("application/json")
+//                .body(JSON.toJSONString(requestMap))
+//                .execute()
+//                .body(); // 发送请求并获取响应体
         return JSON.parseObject(resultPageStr, new TypeReference<>() {});
     }
 
@@ -55,7 +65,6 @@ public interface ShortLinkRemoteService {
     default BaseResult<List<ShortLinkGroupCountRespDTO>> countShortLinkListGroup(List<String> requestParam) {
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("requestParam", requestParam);
-        // TODO 调用短链接中心接口参数无法传递
         String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/count", requestMap);
         return JSON.parseObject(resultPageStr, new TypeReference<>() {});
     }
