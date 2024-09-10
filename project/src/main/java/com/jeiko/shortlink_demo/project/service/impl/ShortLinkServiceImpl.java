@@ -3,6 +3,7 @@ package com.jeiko.shortlink_demo.project.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.StrBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -12,6 +13,7 @@ import com.jeiko.shortlink_demo.project.dao.mapper.ShortLinkMapper;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkCreateReqDTO;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkPageReqDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkCreateRespDTO;
+import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkGroupCountRespDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkPageRespDTO;
 import com.jeiko.shortlink_demo.project.service.ShortLinkService;
 import com.jeiko.shortlink_demo.project.utils.HashUtils;
@@ -20,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBloomFilter;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 短链接接口实现层
@@ -79,6 +84,28 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .orderByDesc(ShortLinkDO::getCreateTime);
         IPage<ShortLinkDO> resultPage = baseMapper.selectPage(requestParam, queryWrapper);
         return resultPage.convert(each -> BeanUtil.toBean(each, ShortLinkPageRespDTO.class));
+    }
+
+    @Override
+    public List<ShortLinkGroupCountRespDTO> countShortLinkListGroup(List<String> requestParam) {
+        // 执行sql语句："select gid, count(*) from t_link_n where group in [] and enable_status = 0 group by gid"
+        QueryWrapper<ShortLinkDO> queryWrapper = Wrappers.query(new ShortLinkDO()).
+                select("gid, count(*) as shortLinkCount").
+                in("gid", requestParam).
+                eq("enable_status", 0).
+                groupBy("gid");
+        List<Map<String, Object>> listGroup = baseMapper.selectMaps(queryWrapper);
+        return BeanUtil.copyToList(listGroup, ShortLinkGroupCountRespDTO.class);
+//        Map<String, ShortLinkGroupCountRespDTO> result = new HashMap<>();
+//        listGroup.forEach(each -> result.put((String) each.get("gid"), BeanUtil.toBean(each, ShortLinkGroupCountRespDTO.class))
+//
+//        );
+//        requestParam.forEach(each -> result.putIfAbsent(each, ShortLinkGroupCountRespDTO.builder()
+//                        .gid(each)
+//                        .shortLinkCount(0)
+//                        .build()
+//                ));
+//        return result;
     }
 
     /**

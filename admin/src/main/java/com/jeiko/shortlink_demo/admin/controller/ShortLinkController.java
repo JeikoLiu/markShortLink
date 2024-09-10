@@ -39,4 +39,6 @@ public class ShortLinkController {
     public BaseResult<IPage<ShortLinkPageRespDTO>> pageShortLink(@RequestBody ShortLinkPageReqDTO requestParam) {
         return shortLinkRemoteService.pageShortLink(requestParam);
     }
+
+
 }
