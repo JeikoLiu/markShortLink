@@ -24,6 +24,7 @@ import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkGroupCountRespDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkPageRespDTO;
 import com.jeiko.shortlink_demo.project.service.ShortLinkService;
 import com.jeiko.shortlink_demo.project.utils.HashUtils;
+import com.jeiko.shortlink_demo.project.utils.LinkUtils;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
@@ -96,6 +97,12 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 throw new ServiceException("短链接生成重复");
             }
         }
+        // 创建短链接时缓存预热
+        stringRedisTemplate.opsForValue().set(
+                fullShortUrl,
+                requestParam.getOriginUrl(),
+                LinkUtils.getCacheValidateTime(shortLinkDO.getValidDate())
+        );
         createShortLinkCachePenetrationBloomFilter.add(fullShortUrl);
         return ShortLinkCreateRespDTO.builder()
                 .fullShortUrl("http://" + shortLinkDO.getFullShortUrl())
@@ -231,6 +238,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             ShortLinkDO shortLinkDO = baseMapper.selectOne(shortLinkQueryWrapper);
             if (shortLinkDO != null) {
                 stringRedisTemplate.opsForValue().set(String.format(GOTO_SHORT_LINK_KEY, fullShortUrl), shortLinkDO.getOriginUrl());
+
                 ((HttpServletResponse)response).sendRedirect(shortLinkDO.getOriginUrl());
             }
         } finally {
