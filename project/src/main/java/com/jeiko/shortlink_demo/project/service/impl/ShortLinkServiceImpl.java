@@ -246,21 +246,19 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                     .eq(ShortLinkDO::getDelFlag, 0)
                     .eq(ShortLinkDO::getEnableStatus, 0);
             ShortLinkDO shortLinkDO = baseMapper.selectOne(shortLinkQueryWrapper);
-            if (shortLinkDO != null) {
-                // 判断短链接有效期是否过期，过期则不予跳转
-                if (shortLinkDO.getValidDate() != null && shortLinkDO.getValidDate().before(new Date())) {
-                    stringRedisTemplate.opsForValue().set(String.format(GOTO_ISNULL_SHORT_LINK_KEY, fullShortUrl), "-", 30, TimeUnit.MINUTES);
-                    ((HttpServletResponse) response).sendRedirect("/page/notfound");
-                    return;
-                }
-                stringRedisTemplate.opsForValue().set(
-                        String.format(GOTO_SHORT_LINK_KEY, fullShortUrl),
-                        shortLinkDO.getOriginUrl(),
-                        LinkUtils.getCacheValidateTime(shortLinkDO.getValidDate()),
-                        TimeUnit.MILLISECONDS
-                );
-                ((HttpServletResponse)response).sendRedirect(shortLinkDO.getOriginUrl());
+            // 判断短链接是否有效（enabled字段）或者短链接有效期是否过期，无效或者过期均不予跳转
+            if (shortLinkDO == null || shortLinkDO.getValidDate() != null && shortLinkDO.getValidDate().before(new Date())) {
+                stringRedisTemplate.opsForValue().set(String.format(GOTO_ISNULL_SHORT_LINK_KEY, fullShortUrl), "-", 30, TimeUnit.MINUTES);
+                ((HttpServletResponse) response).sendRedirect("/page/notfound");
+                return;
             }
+            stringRedisTemplate.opsForValue().set(
+                    String.format(GOTO_SHORT_LINK_KEY, fullShortUrl),
+                    shortLinkDO.getOriginUrl(),
+                    LinkUtils.getCacheValidateTime(shortLinkDO.getValidDate()),
+                    TimeUnit.MILLISECONDS
+            );
+            ((HttpServletResponse)response).sendRedirect(shortLinkDO.getOriginUrl());
         } finally {
             lock.unlock();
         }
