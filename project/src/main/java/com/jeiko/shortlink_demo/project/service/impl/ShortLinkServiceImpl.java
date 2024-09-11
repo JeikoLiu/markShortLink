@@ -41,9 +41,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
-import static com.jeiko.shortlink_demo.project.common.constant.RedisKeyConstant.GOTO_SHORT_LINK_KEY;
-import static com.jeiko.shortlink_demo.project.common.constant.RedisKeyConstant.LOCK_GOTO_SHORT_LINK_KEY;
+import static com.jeiko.shortlink_demo.project.common.constant.RedisKeyConstant.*;
 
 /**
  * 短链接接口实现层
@@ -196,6 +196,16 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             ((HttpServletResponse)response).sendRedirect(originalLink);
             return;
         }
+        boolean contains = createShortLinkCachePenetrationBloomFilter.contains(fullShortUrl);
+        if (!contains) {
+            // 不包含说明短链接在数据库中一定不存在
+            return;
+        }
+        String gotoNullShortLink = stringRedisTemplate.opsForValue().get(String.format(GOTO_ISNULL_SHORT_LINK_KEY, fullShortUrl));
+        if (StrUtil.isNotBlank(gotoNullShortLink)) {
+            // 当前短链接跳转为“空”-->为缓解缓存穿透将不存在数据库的记录设为“空”
+            return;
+        }
         RLock lock = redissonClient.getLock(String.format(LOCK_GOTO_SHORT_LINK_KEY, fullShortUrl));
         lock.lock();
         try {
@@ -210,6 +220,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             ShortLinkGotoDO shortLinkGotoDO = shortLinkGotoMapper.selectOne(linkGotoQueryWrapper);
             if (shortLinkGotoDO == null) {
                 // TODO 做一定的封控
+                stringRedisTemplate.opsForValue().set(String.format(GOTO_ISNULL_SHORT_LINK_KEY, fullShortUrl), "-", 30, TimeUnit.MINUTES);
                 return;
             }
             LambdaQueryWrapper<ShortLinkDO> shortLinkQueryWrapper = Wrappers.lambdaQuery(ShortLinkDO.class)
