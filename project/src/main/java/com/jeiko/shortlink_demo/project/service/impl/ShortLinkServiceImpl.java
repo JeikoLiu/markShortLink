@@ -199,6 +199,19 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             baseMapper.delete(deleteWrapper);
             baseMapper.insert(updateShortLinkDO);
         }
+        // 修改短链接后保障缓存于数据库的一致性————使用先更新数据库再删缓存的方法保障一致性，适用于系统并发性不大的项目
+        // TODO 使用Canal+Binlog的方法保障数据一致性
+        if (!Objects.equals(hasShortLinkDO.getValidDateType(), requestParam.getValidDateType())
+                || !Objects.equals(hasShortLinkDO.getValidDate(), requestParam.getValidDate())
+                || !Objects.equals(hasShortLinkDO.getOriginUrl(), requestParam.getOriginUrl())) {
+            stringRedisTemplate.delete(String.format(GOTO_SHORT_LINK_KEY, requestParam.getFullShortUrl()));
+            Date currentDate = new Date();
+            if (hasShortLinkDO.getValidDateType() != null && hasShortLinkDO.getValidDate().after(currentDate)) {
+                if (Objects.equals(requestParam.getValidDateType(), ValidateTypeEnum.PERMANENT.getType()) || requestParam.getValidDate().after(currentDate)) {
+                    stringRedisTemplate.delete(String.format(LOCK_GOTO_SHORT_LINK_KEY, requestParam.getFullShortUrl()));
+                }
+            }
+        }
     }
 
     @SneakyThrows
