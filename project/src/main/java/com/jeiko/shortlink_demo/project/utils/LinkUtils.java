@@ -97,4 +97,30 @@ public class LinkUtils {
             return "Unknown";
         }
     }
+
+    /**
+     * 获取用户访问设备
+     *
+     * @param request 请求
+     * @return 访问设备
+     */
+    public static String getDevice(HttpServletRequest request) {
+        String userAgent = request.getHeader("User-Agent");
+        if (userAgent.toLowerCase().contains("mobile")) {
+            return "Mobile";
+        }
+        return "PC";
+    }
+
+    /**
+     * 获取用户访问网络
+     *
+     * @param request 请求
+     * @return 访问设备
+     */
+    public static String getNetwork(HttpServletRequest request) {
+        String actualIp = getActualIp(request);
+        // TODO 这里简单判断IP地址范围，可能需要更复杂的逻辑,比如通过调用IP地址库或调用第三方服务来判断网络类型
+        return actualIp.startsWith("192.168.") || actualIp.startsWith("10.") ? "WIFI" : "Mobile";
+    }
 }
