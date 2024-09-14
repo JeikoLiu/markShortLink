@@ -7,7 +7,6 @@ import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkStatsRespDTO;
 import com.jeiko.shortlink_demo.project.service.ShortLinkStatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,7 +21,13 @@ public class ShortLinkStatsController {
      * 访问单个短链接指定时间内监控数据
      */
     @GetMapping("/api/short-link/v1/stats")
-    public BaseResult<ShortLinkStatsRespDTO> shortLinkStats(@RequestBody ShortLinkStatsReqDTO requestParam) {
+    public BaseResult<ShortLinkStatsRespDTO> shortLinkStats(ShortLinkStatsReqDTO requestParam) {
+//        @RequestParam("gid") String gid, @RequestParam("fullShortUrl") String fullShortUrl, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate
+//        ShortLinkStatsReqDTO requestParam = new ShortLinkStatsReqDTO();
+//        requestParam.setGid(gid);
+//        requestParam.setFullShortUrl(fullShortUrl);
+//        requestParam.setStartDate(startDate);
+//        requestParam.setEndDate(endDate);
         return ResultUtils.success(shortLinkStatsService.oneShortLinkStats(requestParam));
     }
 }

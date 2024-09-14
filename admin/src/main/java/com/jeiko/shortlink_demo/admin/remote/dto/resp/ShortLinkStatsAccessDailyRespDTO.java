@@ -1,4 +1,4 @@
-package com.jeiko.shortlink_demo.project.dto.resp;
+package com.jeiko.shortlink_demo.admin.remote.dto.resp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
