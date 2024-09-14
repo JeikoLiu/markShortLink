@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 /**
  * 基础访问监控响应参数
  */
@@ -20,7 +18,7 @@ public class ShortLinkStatsAccessDailyRespDTO {
      * 访问日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date date;
+    private String date;
 
     /**
      * 访问量
