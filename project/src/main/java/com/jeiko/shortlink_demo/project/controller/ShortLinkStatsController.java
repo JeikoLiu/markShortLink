@@ -3,6 +3,7 @@ package com.jeiko.shortlink_demo.project.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jeiko.shortlink_demo.project.common.convention.result.BaseResult;
 import com.jeiko.shortlink_demo.project.common.convention.result.ResultUtils;
+import com.jeiko.shortlink_demo.project.dto.req.ShortLinkGroupStatsReqDTO;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkStatsAccessRecordReqDTO;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkStatsReqDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkStatsAccessRecordRespDTO;
@@ -32,6 +33,14 @@ public class ShortLinkStatsController {
 //        requestParam.setStartDate(startDate);
 //        requestParam.setEndDate(endDate);
         return ResultUtils.success(shortLinkStatsService.oneShortLinkStats(requestParam));
+    }
+
+    /**
+     * 访问分组短链接指定时间内监控数据
+     */
+    @GetMapping("/api/short-link/v1/stats/group")
+    public BaseResult<ShortLinkStatsRespDTO> groupShortLinkStats(ShortLinkGroupStatsReqDTO requestParam) {
+        return ResultUtils.success(shortLinkStatsService.groupShortLinkStats(requestParam));
     }
 
     /**
