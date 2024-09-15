@@ -1,8 +1,11 @@
 package com.jeiko.shortlink_demo.admin.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jeiko.shortlink_demo.admin.common.convention.result.BaseResult;
 import com.jeiko.shortlink_demo.admin.remote.dto.ShortLinkRemoteService;
+import com.jeiko.shortlink_demo.admin.remote.dto.req.ShortLinkStatsAccessRecordReqDTO;
 import com.jeiko.shortlink_demo.admin.remote.dto.req.ShortLinkStatsReqDTO;
+import com.jeiko.shortlink_demo.admin.remote.dto.resp.ShortLinkStatsAccessRecordRespDTO;
 import com.jeiko.shortlink_demo.admin.remote.dto.resp.ShortLinkStatsRespDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,5 +29,13 @@ public class ShortLinkStatsController {
     @GetMapping("/api/short-link/admin/v1/stats")
     public BaseResult<ShortLinkStatsRespDTO> shortLinkStats(ShortLinkStatsReqDTO requestParam) {
         return shortLinkRemoteService.oneShortLinkStats(requestParam);
+    }
+
+    /**
+     * 访问单个短链接指定时间内访问记录监控数据
+     */
+    @GetMapping("/api/short-link/admin/v1/stats/access-record")
+    public BaseResult<IPage<ShortLinkStatsAccessRecordRespDTO>> shortLinkAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam){
+        return shortLinkRemoteService.shortLinkStatsAccessRecord(requestParam);
     }
 }

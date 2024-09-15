@@ -7,10 +7,7 @@ import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jeiko.shortlink_demo.admin.common.convention.result.BaseResult;
 import com.jeiko.shortlink_demo.admin.remote.dto.req.*;
-import com.jeiko.shortlink_demo.admin.remote.dto.resp.ShortLinkCreateRespDTO;
-import com.jeiko.shortlink_demo.admin.remote.dto.resp.ShortLinkGroupCountRespDTO;
-import com.jeiko.shortlink_demo.admin.remote.dto.resp.ShortLinkPageRespDTO;
-import com.jeiko.shortlink_demo.admin.remote.dto.resp.ShortLinkStatsRespDTO;
+import com.jeiko.shortlink_demo.admin.remote.dto.resp.*;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -139,6 +136,20 @@ public interface ShortLinkRemoteService {
      */
     default BaseResult<ShortLinkStatsRespDTO> oneShortLinkStats(ShortLinkStatsReqDTO requestParam) {
         String resultStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/stats", BeanUtil.beanToMap(requestParam));
+        return JSON.parseObject(resultStr, new TypeReference<>() {
+        });
+    }
+
+    /**
+     * 访问单个短链接指定时间内访问记录监控数据
+     * @param requestParam 访问记录请求参数
+     * @return 短链接访问记录监控信息
+     */
+    default BaseResult<IPage<ShortLinkStatsAccessRecordRespDTO>> shortLinkStatsAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam) {
+        Map<String, Object> requestMap = BeanUtil.beanToMap(requestParam, false, true);
+        requestMap.remove("orders");
+        requestMap.remove("records");
+        String resultStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/stats/access-record", requestMap);
         return JSON.parseObject(resultStr, new TypeReference<>() {
         });
     }
