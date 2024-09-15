@@ -35,11 +35,14 @@ public class ShortLinkStatsServiceImpl implements ShortLinkStatsService {
 
     @Override
     public ShortLinkStatsRespDTO oneShortLinkStats(ShortLinkStatsReqDTO requestParam) {
-        // 基础访问详情
         List<LinkAccessStatsDO> listShortLinkStats = linkAccessStatsMapper.listShortLinkStats(requestParam);
         if (CollUtil.isEmpty(listShortLinkStats)) {
             return null;
         }
+        // 基础访问数据（PV/UV/UIP）
+        LinkAccessStatsDO pvUvUidStatsByShortLink = linkAccessLogsMapper.findPvUvUidStats(requestParam);
+
+        // 基础访问详情（每天的访问量）
         List<ShortLinkStatsAccessDailyRespDTO> daily = new ArrayList<>();
         List<String> rangeDates = DateUtil.rangeToList(DateUtil.parse(requestParam.getStartDate()), DateUtil.parse(requestParam.getEndDate()), DateField.DAY_OF_MONTH).stream()
                 .map(DateUtil::formatDate)
@@ -215,6 +218,9 @@ public class ShortLinkStatsServiceImpl implements ShortLinkStatsService {
         uvTypeStats.add(oldUvRespDTO);
 
         return ShortLinkStatsRespDTO.builder()
+                .pv(pvUvUidStatsByShortLink.getPv())
+                .uv(pvUvUidStatsByShortLink.getUv())
+                .uip(pvUvUidStatsByShortLink.getUip())
                 .daily(daily)
                 .localeCnStats(localeCnStats)
                 .hourStats(hourStats)

@@ -29,6 +29,7 @@
         <redisson.version>3.21.3</redisson.version>
         <guava.version>30.0-jre</guava.version>
         <jsoup.version>1.15.3</jsoup.version>
+        <spotless-maven-plugin.version>2.22.1</spotless-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -131,6 +132,31 @@
                     <target>1.9</target>
                 </configuration>
             </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>com.diffplug.spotless</groupId>-->
+<!--                <artifactId>spotless-maven-plugin</artifactId>-->
+<!--                <version>${spotless-maven-plugin.version}</version>-->
+<!--                <configuration>-->
+<!--                    <java>-->
+<!--                        &lt;!&ndash;<eclipse>-->
+<!--                            <file>${maven.multiModuleProjectDirectory}/format/short-link_spotless_formatter.xml</file>-->
+<!--                        </eclipse>&ndash;&gt;-->
+<!--                        <licenseHeader>-->
+<!--                            &lt;!&ndash; ${maven.multiModuleProjectDirectory} 爆红属于正常，并不影响编译或者运行，忽略就好 &ndash;&gt;-->
+<!--                            <file>${maven.multiModuleProjectDirectory}/format/license-header</file>-->
+<!--                        </licenseHeader>-->
+<!--                    </java>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>apply</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>compile</phase>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
