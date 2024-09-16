@@ -3,6 +3,7 @@ package com.jeiko.shortlink_demo.project.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jeiko.shortlink_demo.project.common.convention.result.BaseResult;
 import com.jeiko.shortlink_demo.project.common.convention.result.ResultUtils;
+import com.jeiko.shortlink_demo.project.dto.req.ShortLinkGroupStatsAccessRecordReqDTO;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkGroupStatsReqDTO;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkStatsAccessRecordReqDTO;
 import com.jeiko.shortlink_demo.project.dto.req.ShortLinkStatsReqDTO;
@@ -49,5 +50,10 @@ public class ShortLinkStatsController {
     @GetMapping("/api/short-link/v1/stats/access-record")
     public BaseResult<IPage<ShortLinkStatsAccessRecordRespDTO>> shortLinkAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam) {
         return ResultUtils.success(shortLinkStatsService.shortLinkStatsAccessRecord(requestParam));
+    }
+
+    @GetMapping("/api/short-link/v1/stats/access-record/group")
+    public BaseResult<IPage<ShortLinkStatsAccessRecordRespDTO>> groupShortLinkAccessRecord(ShortLinkGroupStatsAccessRecordReqDTO requestParam) {
+        return ResultUtils.success(shortLinkStatsService.groupShortLinkStatsAccessRecord(requestParam));
     }
 }
