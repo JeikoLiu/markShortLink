@@ -116,7 +116,7 @@ public interface LinkAccessLogsMapper extends BaseMapper<LinkAccessLogsDO> {
             "FROM " +
             "    t_link_access_logs " +
             "WHERE " +
-            "    AND gid = #{param.gid} " +
+            "    gid = #{param.gid} " +
             "    AND user IN " +
             "    <foreach item='item' index='index' collection='param.userAccessList' open='(' separator=',' close=')'> " +
             "        #{item} " +

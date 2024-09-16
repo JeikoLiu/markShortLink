@@ -443,7 +443,7 @@ public class ShortLinkStatsServiceImpl implements ShortLinkStatsService {
     @Override
     public IPage<ShortLinkStatsAccessRecordRespDTO> groupShortLinkStatsAccessRecord(ShortLinkGroupStatsAccessRecordReqDTO requestParam) {
         // 保证最后一天的数据正常查出
-        requestParam.setStartDate(requestParam.getEndDate() + " 00:00:00");
+        requestParam.setStartDate(requestParam.getStartDate() + " 00:00:00");
         requestParam.setEndDate(requestParam.getEndDate() + " 23:59:59");
         LambdaQueryWrapper<LinkAccessLogsDO> queryWrapper = Wrappers.lambdaQuery(LinkAccessLogsDO.class)
                 .eq(LinkAccessLogsDO::getGid, requestParam.getGid())
