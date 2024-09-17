@@ -38,11 +38,7 @@ public class ShortLinkController {
      * 分页查询短链接
      */
     @GetMapping("/api/short-link/v1/page")
-    public BaseResult<IPage<ShortLinkPageRespDTO>> pageShortLink(@RequestParam("gid") String gid, @RequestParam("current") Integer current, @RequestParam("size") Integer size) {
-        ShortLinkPageReqDTO requestParam = new ShortLinkPageReqDTO();
-        requestParam.setGid(gid);
-        requestParam.setCurrent(current);
-        requestParam.setSize(size);
+    public BaseResult<IPage<ShortLinkPageRespDTO>> pageShortLink(ShortLinkPageReqDTO requestParam) {
         return ResultUtils.success(shortLinkService.pageShortLink(requestParam));
     }
 

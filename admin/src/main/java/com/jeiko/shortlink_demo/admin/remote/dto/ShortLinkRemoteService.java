@@ -83,11 +83,7 @@ public interface ShortLinkRemoteService {
      * @return 分页查询短链接结果
      */
     default BaseResult<IPage<ShortLinkPageRespDTO>> pageRecycleBinShortLink(ShortLinkRecycleBinPageReqDTO requestParam) {
-        Map<String, Object> requestMap = new HashMap<>();
-        requestMap.put("gidList", requestParam.getGidList());
-        requestMap.put("current", requestParam.getCurrent());
-        requestMap.put("size", requestParam.getSize());
-        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/page", requestMap);
+        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/page", BeanUtil.beanToMap(requestParam));
         return JSON.parseObject(resultPageStr, new TypeReference<>() {
         });
     }
