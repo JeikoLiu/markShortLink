@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 用户分组控制层
+ */
 @RestController
 @RequiredArgsConstructor
 public class GroupController {

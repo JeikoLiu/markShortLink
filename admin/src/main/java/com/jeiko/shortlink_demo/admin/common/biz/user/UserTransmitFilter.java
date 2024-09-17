@@ -32,7 +32,7 @@ public class UserTransmitFilter implements Filter {
     // 免拦截的URI名单
     private static final List<String> IGNORE_URI = Lists.newArrayList(
             "/api/short-link/admin/v1/user/login",
-            "/api/short-link/admin/v1/has-username"
+            "/api/short-link/admin/v1/user/has-username"
     );
 
     @SneakyThrows

@@ -11,6 +11,9 @@ import com.jeiko.shortlink_demo.admin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 用户中心控制层
+ */
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -31,7 +34,7 @@ public class UserController {
     /**
      * 查村用户名是否存在
      */
-    @GetMapping("/api/short-link/admin/v1/has-username")
+    @GetMapping("/api/short-link/admin/v1/user/has-username")
     public BaseResult<Boolean> hasUserName(@RequestParam("username") String username) {
         return ResultUtils.success(userService.hasUserName(username));
     }
