@@ -1,5 +1,6 @@
 package com.jeiko.shortlink_demo.project.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jeiko.shortlink_demo.project.common.convention.result.BaseResult;
 import com.jeiko.shortlink_demo.project.common.convention.result.ResultUtils;
@@ -11,6 +12,7 @@ import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkBatchCreateRespDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkCreateRespDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkGroupCountRespDTO;
 import com.jeiko.shortlink_demo.project.dto.resp.ShortLinkPageRespDTO;
+import com.jeiko.shortlink_demo.project.handler.CustomBlockHandler;
 import com.jeiko.shortlink_demo.project.service.ShortLinkService;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -32,6 +34,11 @@ public class ShortLinkController {
      * 创建短链接
      */
     @PostMapping("/api/short-link/v1/create")
+    @SentinelResource(
+            value = "create_short-link",
+            blockHandler = "createShortLinkBlockHandlerMethod",
+            blockHandlerClass = CustomBlockHandler.class
+    )
     public BaseResult<ShortLinkCreateRespDTO> createShortLink(@RequestBody ShortLinkCreateReqDTO requestParam) {
         return ResultUtils.success(shortLinkService.createShortLink(requestParam));
     }
