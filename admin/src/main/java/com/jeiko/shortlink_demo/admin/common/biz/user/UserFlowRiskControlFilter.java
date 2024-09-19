@@ -49,6 +49,7 @@ public class UserFlowRiskControlFilter implements Filter {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            return;
         }
         if (result == null || result > userFlowRiskControlConfiguration.getMaxAccessCount()) {
             try {
@@ -56,6 +57,7 @@ public class UserFlowRiskControlFilter implements Filter {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            return;
         }
         filterChain.doFilter(request, response);
     }
