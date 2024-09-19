@@ -21,6 +21,7 @@ public class DelayShortLinkStatsProducer {
     /**
      * 发送延迟消费短链接统计
      */
+    // TODO 使用MQ中间件改造（如RocketMQ）
     private final RedissonClient redissonClient;
 
     public void sendDelayShortLinkStats(ShortLinkStatsRecordDTO statsRecord) {

@@ -1,6 +1,7 @@
 package com.jeiko.shortlink_demo.admin.service.imp;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -26,6 +27,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -102,6 +104,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         UserDO result = baseMapper.selectOne(queryWrapper);
         if (result == null) {
             throw new ClientException("用户不存在");
+        }
+        Map<Object, Object> hasLoginMap = stringRedisTemplate.opsForHash().entries(USER_LOGIN_KEY + requestParam.getUsername());
+        if (CollUtil.isNotEmpty(hasLoginMap)) {
+            String userToken = hasLoginMap.keySet().stream()
+                    .findFirst()
+                    .map(Object::toString)
+                    .orElseThrow(() -> new ClientException("用户重复登陆"));
+            return new UserLoginRespDTO(userToken);
         }
         /**
          * Hash
