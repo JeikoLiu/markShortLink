@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 import static com.jeiko.shortlink_demo.project.common.constant.RedisKeyConstant.GOTO_ISNULL_SHORT_LINK_KEY;
 import static com.jeiko.shortlink_demo.project.common.constant.RedisKeyConstant.GOTO_SHORT_LINK_KEY;
 
@@ -79,9 +81,11 @@ public class RecycleBinServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLin
                 .eq(ShortLinkDO::getGid, requestParam.getGid())
                 .eq(ShortLinkDO::getFullShortUrl, requestParam.getFullShortUrl())
                 .eq(ShortLinkDO::getDelFlag, 0)
+                .eq(ShortLinkDO::getDelTime, null)
                 .eq(ShortLinkDO::getEnableStatus, 1);
         ShortLinkDO shortLinkDO = new ShortLinkDO();
         shortLinkDO.setDelFlag(1);
+        shortLinkDO.setDelTime(new Date());
         baseMapper.update(shortLinkDO, updateWrapper);
     }
 }

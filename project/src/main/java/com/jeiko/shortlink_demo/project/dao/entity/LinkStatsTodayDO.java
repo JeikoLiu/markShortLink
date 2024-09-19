@@ -1,6 +1,7 @@
 package com.jeiko.shortlink_demo.project.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.jeiko.shortlink_demo.project.common.database.BaseDO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LinkStatsTodayDO {
+public class LinkStatsTodayDO extends BaseDO {
     /**
      * id
      */
