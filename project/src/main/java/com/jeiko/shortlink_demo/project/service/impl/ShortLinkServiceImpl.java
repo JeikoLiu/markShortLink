@@ -116,7 +116,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .totalPv(0)
                 .totalUv(0)
                 .totalUip(0)
-                .delTime(null)
+                .delTime(0L)
                 .build();
         // 将gid和fullShortUrl添加至路由表
         ShortLinkGotoDO linkGotoDO = ShortLinkGotoDO.builder()
@@ -196,7 +196,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .in("gid", requestParam)
                 .eq("enable_status", 0)
                 .eq("del_flag", 0)
-                .eq("del_time", null)
+                .eq("del_time", 0L)
                 .groupBy("gid");
         List<Map<String, Object>> listGroup = baseMapper.selectMaps(queryWrapper);
         return BeanUtil.copyToList(listGroup, ShortLinkGroupCountRespDTO.class);
@@ -258,10 +258,10 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .eq(ShortLinkDO::getFullShortUrl, requestParam.getFullShortUrl())
                         .eq(ShortLinkDO::getGid, hasShortLinkDO.getGid())
                         .eq(ShortLinkDO::getDelFlag, 0)
-                        .eq(ShortLinkDO::getDelTime, null)
+                        .eq(ShortLinkDO::getDelTime, 0L)
                         .eq(ShortLinkDO::getEnableStatus, 0);
                 ShortLinkDO delShortLinkDO = ShortLinkDO.builder()
-                        .delTime(new Date())
+                        .delTime(System.currentTimeMillis())
                         .build();
                 delShortLinkDO.setDelFlag(1);
                 baseMapper.update(delShortLinkDO, linkUpdateWrapper);
@@ -280,7 +280,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .totalUip(hasShortLinkDO.getTotalUip())
                         .fullShortUrl(hasShortLinkDO.getFullShortUrl())
                         .favicon(getFavicon(requestParam.getOriginUrl()))
-                        .delTime(null)
+                        .delTime(0L)
                         .build();
                 baseMapper.insert(shortLinkDO);
                 // 更行今日访问统计表

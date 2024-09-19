@@ -83,7 +83,7 @@ public class ShortLinkDO extends BaseDO implements Serializable {
     /**
      * 删除时间
      */
-    private Date delTime;
+    private Long delTime;
 
     /**
      * 历史PV
