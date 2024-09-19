@@ -17,3 +17,7 @@ spring:
 #mybatis-plus:
 #  configuration:
 #    map-underscore-to-camel-case: true
+
+short-link:
+  group:
+    max-num: 20
