@@ -29,4 +29,13 @@ short-link:
   stats:
     locale:
       amap-key: e11655972d2a39b403fc306eae51040c
+  goto-domain:
+    white-list:
+      enable: true
+      names: '力扣平台,知乎,掘金,博客园'
+      details:
+        - leetcode.cn
+        - zhihu.com
+        - juejin.cn
+        - cnblogs.com
 
