@@ -14,7 +14,7 @@ import com.jeiko.shortlink_demo.admin.dao.mapper.GroupMapper;
 import com.jeiko.shortlink_demo.admin.dto.req.ShortLinkGroupSortReqDTO;
 import com.jeiko.shortlink_demo.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import com.jeiko.shortlink_demo.admin.dto.resp.ShortLinkGroupListRespDTO;
-import com.jeiko.shortlink_demo.admin.remote.dto.ShortLinkRemoteService;
+import com.jeiko.shortlink_demo.admin.remote.dto.ShortLinkActualRemoteService;
 import com.jeiko.shortlink_demo.admin.remote.dto.resp.ShortLinkGroupCountRespDTO;
 import com.jeiko.shortlink_demo.admin.service.GroupService;
 import com.jeiko.shortlink_demo.admin.utils.RandomGenerator;
@@ -40,16 +40,11 @@ import static com.jeiko.shortlink_demo.admin.common.constant.RedisCacheConstant.
 @RequiredArgsConstructor
 public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implements GroupService {
 
+    private final ShortLinkActualRemoteService shortLinkActualRemoteService;
     private final RedissonClient redissonClient;
 
     @Value("${short-link.group.max-num}")
     private Integer groupMaxNum;
-
-    /**
-     * 后续重构为 SpringCloud Feign 调用
-     */
-    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
-    };
 
     @Override
     public void saveGroup(String groupName) {
@@ -91,7 +86,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
                 .eq(GroupDO::getUsername, UserContext.getUsername())
                 .orderByDesc(GroupDO::getSortOrder, GroupDO::getUpdateTime);
         List<GroupDO> groupDOList = baseMapper.selectList(queryWrapper);
-        BaseResult<List<ShortLinkGroupCountRespDTO>> listCountResult = shortLinkRemoteService
+        BaseResult<List<ShortLinkGroupCountRespDTO>> listCountResult = shortLinkActualRemoteService
                 .countShortLinkListGroup(groupDOList.stream().map(GroupDO::getGid).collect(Collectors.toList()));
         // 此时 shortLinkGroupListRespDTOList 的shortLinkCount为空
         List<ShortLinkGroupListRespDTO> shortLinkGroupListRespDTOList = BeanUtil.copyToList(groupDOList, ShortLinkGroupListRespDTO.class);
