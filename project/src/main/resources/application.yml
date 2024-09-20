@@ -9,6 +9,8 @@ spring:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
     # ShardingSphere 配置文件路径
     url: jdbc:shardingsphere:classpath:shardingsphere-config-${database.env:dev}.yaml
+  jackson:
+    time-zone: Asia/Shanghai
   data:
     redis:
       host: 127.0.0.1

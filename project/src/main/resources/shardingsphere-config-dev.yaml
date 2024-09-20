@@ -3,7 +3,7 @@ dataSources:
   ds_0:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://localhost:3306/shortlink
+    jdbcUrl: jdbc:mysql://localhost:3306/shortlink?serverTimezone=Asia/Shanghai
     username: root
     password: 123456
 
