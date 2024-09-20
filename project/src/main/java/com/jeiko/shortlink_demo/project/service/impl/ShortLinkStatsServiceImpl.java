@@ -63,6 +63,7 @@ public class ShortLinkStatsServiceImpl implements ShortLinkStatsService {
                             .uv(0)
                             .uip(0)
                             .build();
+                    daily.add(result);
                 })
         );
         // 地区访问详情（仅国内）
@@ -402,9 +403,6 @@ public class ShortLinkStatsServiceImpl implements ShortLinkStatsService {
 
     @Override
     public IPage<ShortLinkStatsAccessRecordRespDTO> shortLinkStatsAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam) {
-        // 保证最后一天的数据正常查出
-        requestParam.setStartDate(requestParam.getStartDate() + " 00:00:00");
-        requestParam.setEndDate(requestParam.getEndDate() + " 23:59:59");
         LambdaQueryWrapper<LinkAccessLogsDO> queryWrapper = Wrappers.lambdaQuery(LinkAccessLogsDO.class)
                 .eq(LinkAccessLogsDO::getGid, requestParam.getGid())
                 .eq(LinkAccessLogsDO::getFullShortUrl, requestParam.getFullShortUrl())
@@ -442,9 +440,6 @@ public class ShortLinkStatsServiceImpl implements ShortLinkStatsService {
 
     @Override
     public IPage<ShortLinkStatsAccessRecordRespDTO> groupShortLinkStatsAccessRecord(ShortLinkGroupStatsAccessRecordReqDTO requestParam) {
-        // 保证最后一天的数据正常查出
-        requestParam.setStartDate(requestParam.getStartDate() + " 00:00:00");
-        requestParam.setEndDate(requestParam.getEndDate() + " 23:59:59");
         LambdaQueryWrapper<LinkAccessLogsDO> queryWrapper = Wrappers.lambdaQuery(LinkAccessLogsDO.class)
                 .eq(LinkAccessLogsDO::getGid, requestParam.getGid())
                 .eq(LinkAccessLogsDO::getDelFlag, 0)
