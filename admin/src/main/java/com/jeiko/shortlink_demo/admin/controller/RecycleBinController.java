@@ -39,7 +39,7 @@ public class RecycleBinController {
      * 回收站短链接分页查询
      */
     @GetMapping("/api/short-link/admin/v1/recycle-bin/page")
-    public BaseResult<Page<ShortLinkPageRespDTO>> page(@RequestBody ShortLinkRecycleBinPageReqDTO requestParam) {
+    public BaseResult<Page<ShortLinkPageRespDTO>> page(ShortLinkRecycleBinPageReqDTO requestParam) {
         return recycleBinService.pageShortLink(requestParam);
     }
 
