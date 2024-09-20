@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class MessageQueueIdempotentHandler {
-    private StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
     private static final String IDEMPOTENT_KEY_PREFIX = "short-link:idempotent:";
 
