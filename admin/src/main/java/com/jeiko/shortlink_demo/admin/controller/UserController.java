@@ -1,10 +1,12 @@
 package com.jeiko.shortlink_demo.admin.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.jeiko.shortlink_demo.admin.common.convention.result.BaseResult;
 import com.jeiko.shortlink_demo.admin.common.convention.result.ResultUtils;
 import com.jeiko.shortlink_demo.admin.dto.req.UserLoginReqDTO;
 import com.jeiko.shortlink_demo.admin.dto.req.UserRegisterResDTO;
 import com.jeiko.shortlink_demo.admin.dto.req.UserUpdateResDTO;
+import com.jeiko.shortlink_demo.admin.dto.resp.UserActualRespDTO;
 import com.jeiko.shortlink_demo.admin.dto.resp.UserLoginRespDTO;
 import com.jeiko.shortlink_demo.admin.dto.resp.UserRespDTO;
 import com.jeiko.shortlink_demo.admin.service.UserService;
@@ -18,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
-//    @Resource
-//    private UserService userService;
     private final UserService userService;
 
     /**
@@ -29,6 +29,14 @@ public class UserController {
     public BaseResult<UserRespDTO> getUserByUsername(@PathVariable("username") String username) {
         UserRespDTO result = userService.getUserByUsername(username);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 根据用户名查询寻未脱敏的用户信息
+     */
+    @GetMapping("/api/short-link/admin/v1/actual/user/{username}")
+    public BaseResult<UserActualRespDTO> getActualUserByUsername(@PathVariable("username") String username) {
+        return ResultUtils.success(BeanUtil.toBean(userService.getUserByUsername(username), UserActualRespDTO.class));
     }
 
     /**
