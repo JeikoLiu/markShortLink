@@ -2,6 +2,7 @@ package com.jeiko.shortlink_demo.admin.remote.dto;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jeiko.shortlink_demo.admin.common.convention.result.BaseResult;
+import com.jeiko.shortlink_demo.admin.config.OpenFeignConfiguration;
 import com.jeiko.shortlink_demo.admin.remote.dto.req.*;
 import com.jeiko.shortlink_demo.admin.remote.dto.resp.*;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * 短链接中台远程调用服务
  */
-@FeignClient("short-link-project")
+@FeignClient(value = "short-link-project", url = "${aggregation.remote-url:}", configuration = OpenFeignConfiguration.class)
 public interface ShortLinkActualRemoteService {
 
     /**

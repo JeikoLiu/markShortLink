@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * 短链接回收站接口实现层
  */
-@Service
+@Service(value = "recycleBinServiceImplByAdmin")
 @RequiredArgsConstructor
 public class RecycleBinServiceImpl implements RecycleBinService {
 
