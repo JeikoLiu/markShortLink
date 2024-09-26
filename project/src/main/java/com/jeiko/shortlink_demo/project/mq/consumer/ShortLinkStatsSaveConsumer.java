@@ -12,16 +12,16 @@ import com.jeiko.shortlink_demo.project.dao.entity.*;
 import com.jeiko.shortlink_demo.project.dao.mapper.*;
 import com.jeiko.shortlink_demo.project.dto.biz.ShortLinkStatsRecordDTO;
 import com.jeiko.shortlink_demo.project.mq.idempotent.MessageQueueIdempotentHandler;
+import com.jeiko.shortlink_demo.project.mq.producer.DelayShortLinkStatsProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.redisson.api.RLock;
 import org.redisson.api.RReadWriteLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.connection.stream.MapRecord;
-import org.springframework.data.redis.connection.stream.RecordId;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.stream.StreamListener;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -36,7 +36,12 @@ import static com.jeiko.shortlink_demo.project.common.constant.ShortLinkConstant
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRecord<String, String, String>> {
+// public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRecord<String, String, String>> {
+@RocketMQMessageListener(
+        topic = "${rocketmq.producer.topic}",
+        consumerGroup = "${rocketmq.consumer.group}"
+)
+public class ShortLinkStatsSaveConsumer implements RocketMQListener<Map<String, String>> {
 
     private final ShortLinkGotoMapper shortLinkGotoMapper;
     private final RedissonClient redissonClient;
@@ -50,11 +55,42 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
     private final LinkStatsTodayMapper linkStatsTodayMapper;
     private final ShortLinkMapper shortLinkMapper;
     private final StringRedisTemplate stringRedisTemplate;
+    private final DelayShortLinkStatsProducer delayShortLinkStatsProducer;
     private final MessageQueueIdempotentHandler messageQueueIdempotentHandler;
 
     @Value("${short-link.stats.locale.amap-key}")
     private String statsLocaleAmapKey;
 
+    @Override
+    public void onMessage(Map<String, String> producerMap) {
+        String keys = producerMap.get("keys");
+        if (!messageQueueIdempotentHandler.isMessageProcessed(keys)) {
+            // 判断当前的这个消息流程是否执行完成
+            if (messageQueueIdempotentHandler.isAccomplish(keys)) {
+                return;
+            }
+            throw new ServiceException("消息未完成流程，需要消息队列重试");
+        }
+        try {
+            String fullShortUrl = producerMap.get("fullShortUrl");
+            if (StrUtil.isNotBlank(fullShortUrl)) {
+                String gid = producerMap.get("gid");
+                ShortLinkStatsRecordDTO statsRecord = JSON.parseObject(producerMap.get("statsRecord"), ShortLinkStatsRecordDTO.class);
+                actualSaveShortLinkStats(fullShortUrl, gid, statsRecord);
+            }
+        } catch (Throwable ex) {
+            log.error("记录短链接监控消费异常", ex);
+            try {
+                messageQueueIdempotentHandler.deleteIdempotentKey(keys);
+            } catch (Throwable deleteEx) {
+                log.error("删除幂等标识异常", deleteEx);
+            }
+            throw ex;
+        }
+        messageQueueIdempotentHandler.setAccomplish(keys);
+    }
+
+    /**
     @Override
     public void onMessage(MapRecord<String, String, String> message) {
         String stream = message.getStream();
@@ -83,6 +119,7 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
         // 设置消息流程执行完成
         messageQueueIdempotentHandler.setAccomplish(id.toString());
     }
+    **/
 
     private void actualSaveShortLinkStats(String fullShortUrl, String gid, ShortLinkStatsRecordDTO statsRecord) {
         fullShortUrl = Optional.ofNullable(fullShortUrl).orElse(statsRecord.getFullShortUrl());

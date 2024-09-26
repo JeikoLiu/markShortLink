@@ -1,29 +1,11 @@
 package com.jeiko.shortlink_demo.project.config;
 
-import com.jeiko.shortlink_demo.project.mq.consumer.ShortLinkStatsSaveConsumer;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.stream.Consumer;
-import org.springframework.data.redis.connection.stream.MapRecord;
-import org.springframework.data.redis.connection.stream.ReadOffset;
-import org.springframework.data.redis.connection.stream.StreamOffset;
-import org.springframework.data.redis.stream.StreamMessageListenerContainer;
-
-import java.time.Duration;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.jeiko.shortlink_demo.project.common.constant.RedisKeyConstant.SHORT_LINK_STATS_STREAM_GROUP_KEY;
-import static com.jeiko.shortlink_demo.project.common.constant.RedisKeyConstant.SHORT_LINK_STATS_STREAM_TOPIC_KEY;
-
 /**
  * Redis Stream 消息队列配置
  */
+
+/**
+@Deprecated
 @Configuration
 @RequiredArgsConstructor
 public class RedisStreamConfiguration {
@@ -68,3 +50,4 @@ public class RedisStreamConfiguration {
         return streamMessageListenerContainer;
     }
 }
+ **/
