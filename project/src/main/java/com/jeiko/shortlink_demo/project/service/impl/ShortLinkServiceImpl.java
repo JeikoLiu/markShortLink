@@ -419,12 +419,17 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         RLock lock = redissonClient.getLock(String.format(LOCK_GOTO_SHORT_LINK_KEY, fullShortUrl));
         lock.lock();
         try {
-            // 双重判定锁
+            // 双重判定锁 (先判断当前缓存命中原始链接，不命中则去缓存中查询空值)
             originalLink = stringRedisTemplate.opsForValue().get(String.format(GOTO_SHORT_LINK_KEY, fullShortUrl));
             if (StrUtil.isNotBlank(originalLink)) {
                 ShortLinkStatsRecordDTO statsRecord = buildLinkStatsRecordAndSetUser(fullShortUrl, request, response);
                 shortLinkStats(fullShortUrl, null, statsRecord);
                 ((HttpServletResponse)response).sendRedirect(originalLink);
+                return;
+            }
+            gotoNullShortLink = stringRedisTemplate.opsForValue().get(String.format(GOTO_ISNULL_SHORT_LINK_KEY, fullShortUrl));
+            if (StrUtil.isNotBlank(gotoNullShortLink)) {
+                ((HttpServletResponse)response).sendRedirect("/page/notfound");
                 return;
             }
             // 根据当前完整短链接路由找到对应gid，再找到对应原始链接；（分片键）
