@@ -12,7 +12,6 @@ import com.jeiko.shortlink_demo.project.dao.entity.*;
 import com.jeiko.shortlink_demo.project.dao.mapper.*;
 import com.jeiko.shortlink_demo.project.dto.biz.ShortLinkStatsRecordDTO;
 import com.jeiko.shortlink_demo.project.mq.idempotent.MessageQueueIdempotentHandler;
-import com.jeiko.shortlink_demo.project.mq.producer.DelayShortLinkStatsProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -51,7 +50,6 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
     private final LinkStatsTodayMapper linkStatsTodayMapper;
     private final ShortLinkMapper shortLinkMapper;
     private final StringRedisTemplate stringRedisTemplate;
-    private final DelayShortLinkStatsProducer delayShortLinkStatsProducer;
     private final MessageQueueIdempotentHandler messageQueueIdempotentHandler;
 
     @Value("${short-link.stats.locale.amap-key}")
@@ -90,10 +88,7 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
         // 引入读锁，在没有写锁的情况下允许多线程并发的读取访问短链接
         RReadWriteLock readWriteLock = redissonClient.getReadWriteLock(String.format(LOCK_GID_UPDATE_KEY, fullShortUrl));
         RLock rLock = readWriteLock.readLock();
-        if (!rLock.tryLock()) {
-            delayShortLinkStatsProducer.sendDelayShortLinkStats(statsRecord);
-            return;
-        }
+        rLock.lock();
         try {
             if (StrUtil.isBlank(gid)) {
                 LambdaQueryWrapper<ShortLinkGotoDO> queryWrapper = Wrappers.lambdaQuery(ShortLinkGotoDO.class)
