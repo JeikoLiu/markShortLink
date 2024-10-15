@@ -20,7 +20,7 @@ public class UserConfiguration {
     @Bean
     public FilterRegistrationBean<UserTransmitFilter> globalUserTransmitFilter() {
         FilterRegistrationBean<UserTransmitFilter> registration = new FilterRegistrationBean<>();
-        // 配置用户信息传输过滤器
+        // 配置用户信息传输过滤器git branch -M main
         registration.setFilter(new UserTransmitFilter());
         registration.addUrlPatterns("/*");
         registration.setOrder(0);
